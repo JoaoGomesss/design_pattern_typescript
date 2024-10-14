@@ -6,7 +6,7 @@ import {
 
 export class SystemUserProxy implements SystemUserProtocol {
   private realUser: SystemUserProtocol | null = null;
-  private realUserAdressess: SystemUserProtocol[] | null = null;
+  private realUserAdressess: SystemUserAddressProtocol[] | null = null;
 
   constructor(public firstName: string, public userName: string) {}
 
@@ -20,6 +20,10 @@ export class SystemUserProxy implements SystemUserProtocol {
 
   async getAddresses(): Promise<SystemUserAddressProtocol[]> {
     this.realUser = this.createUser();
-    return this.realUser.getAddresses();
+
+    if (this.realUserAdressess === null) {
+      this.realUserAdressess = await this.realUser.getAddresses();
+    }
+    return this.realUserAdressess;
   }
 }
